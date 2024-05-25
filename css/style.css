@@ -3,8 +3,7 @@
 @font-face {
 	font-family: CeliaGarcia;
 	src: url('../font/CeliaGarcia.ttf');
-	format
-	('truetype');
+	format ('truetype');
 }
 
 body {
@@ -15,7 +14,9 @@ body {
 	background-image: url('../img/gr_pattern_bkg.png');
 }
 
-ul,menu,dir {
+ul,
+menu,
+dir {
 	display: block;
 	list-style-type: none;
 	-webkit-margin-before: 0em;
@@ -120,7 +121,8 @@ a {
 	opacity: 0.7;
 }
 
-#challenge-code-input { /* position: absolute; */
+#challenge-code-input {
+	/* position: absolute; */
 	/* top: 125px; */
 	/* left: 20px; */
 	padding: 4px;
@@ -134,7 +136,8 @@ a {
 	height: 35px;
 }
 
-#resume-challenge-button { /* position: absolute; */
+#resume-challenge-button {
+	/* position: absolute; */
 	/* color: white; */
 	background-color: rgba(111, 165, 104, 0.61);
 	width: 37px;
@@ -154,7 +157,8 @@ a {
 	display: none;
 }
 
-.challenge-time,.challenge-score {
+.challenge-time,
+.challenge-score {
 	font-size: 14pt;
 }
 
@@ -181,7 +185,8 @@ div#challenge-state {
 	font-weight: bold;
 }
 
-#player-1,#player-2 {
+#player-1,
+#player-2 {
 	width: 46%;
 	float: left;
 	position: relative;
@@ -262,7 +267,8 @@ span.clear-text {
 	margin-left: 23px;
 }
 
-#score-point,#timepoint {
+#score-point,
+#timepoint {
 	width: 110px;
 	height: 60px;
 	border-radius: 5px;
@@ -320,7 +326,24 @@ span.clear-text {
 	font-size: 15pt;
 }
 
-#start-button:HOVER,#reset-button:HOVER {
+#shuffle-button {
+	position: absolute;
+	top: 71px;
+	left: 255px;
+	width: 100px;
+	height: 40px;
+	background-color: rgba(18, 73, 7, 0.17);
+	border-radius: 5px;
+	font-weight: bold;
+	line-height: 40px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 15pt;
+}
+
+#start-button:HOVER,
+#reset-button:HOVER,
+#shuffle-button:HOVER {
 	opacity: 0.8;
 }
 
@@ -386,7 +409,8 @@ span.clear-text {
 	background-color: rgba(255, 255, 165, 0.88);
 }
 
-#overlay,#overlay-layer {
+#overlay,
+#overlay-layer {
 	width: 460px;
 	height: 460px;
 	padding: 20px;
@@ -396,7 +420,9 @@ span.clear-text {
 	border-radius: 10px;
 }
 
-#overlay-play,#overlay-paused,#overlay-message {
+#overlay-play,
+#overlay-paused,
+#overlay-message {
 	color: white;
 	font-size: 78pt;
 	margin: 170px auto;
@@ -416,7 +442,8 @@ span.clear-text {
 	font-size: 23pt;
 }
 
-#overlay-play:HOVER,#overlay-paused:HOVER {
+#overlay-play:HOVER,
+#overlay-paused:HOVER {
 	opacity: 0.8;
 }
 
@@ -477,7 +504,8 @@ h4 {
 	margin-bottom: 15px;
 }
 
-#best-scores-box,#last-challenges-box {
+#best-scores-box,
+#last-challenges-box {
 	width: 500px;
 	margin: 30px auto 0px auto;
 	font-size: 18pt;
@@ -620,7 +648,8 @@ input {
 	background-color: rgba(0, 0, 0, 0.66);
 }
 
-#best-scores,#last-challenges {
+#best-scores,
+#last-challenges {
 	margin-top: 60px;
 	padding-left: 0px;
 	overflow: auto;
@@ -652,7 +681,8 @@ input {
 	color: rgba(6, 128, 35, 0.72);
 }
 
-.player-1,.player-2 {
+.player-1,
+.player-2 {
 	float: left;
 	width: 47%;
 }
@@ -698,7 +728,8 @@ input {
 	margin: 0px;
 }
 
-#loader,#clg-loader {
+#loader,
+#clg-loader {
 	display: block;
 	width: 50px;
 	margin: 25px auto;
@@ -763,7 +794,8 @@ div#match-row {
 	font-size: 18pt;
 }
 
-#new-challenge:HOVER,#resume-challenge-button:HOVER {
+#new-challenge:HOVER,
+#resume-challenge-button:HOVER {
 	opacity: 0.8;
 }
 
@@ -854,19 +886,24 @@ div#match-row {
 		padding: 20px;
 		margin: 0px;
 	}
+
 	#wrapper {
 		width: 280px;
 		margin: 0 auto;
 	}
+
 	#info-box {
 		float: left;
 		margin: 0 0 21px 0;
 		position: relative;
 	}
-	#score-point,#timepoint {
+
+	#score-point,
+	#timepoint {
 		width: 85px;
 		margin: -20px 10px 18px 30px;
 	}
+
 	#start-button {
 		top: 115px;
 		left: 0px;
@@ -874,6 +911,7 @@ div#match-row {
 		height: 35px;
 		line-height: 35px;
 	}
+
 	#reset-button {
 		top: 115px;
 		left: 90px;
@@ -881,6 +919,7 @@ div#match-row {
 		height: 35px;
 		line-height: 35px;
 	}
+
 	h1 {
 		font-size: 30pt;
 		margin-top: 0px;
@@ -889,108 +928,146 @@ div#match-row {
 		display: inline-block;
 		margin-bottom: 15px;
 	}
+
 	header {
 		text-align: center;
 	}
+
 	#play-box {
 		height: 280px;
 		width: 280px;
 	}
+
 	#cells-container {
 		padding: 10px;
 	}
+
 	.row {
 		height: 65px;
 	}
+
 	.row .grid-cell {
 		width: 53px;
 		height: 53px;
 	}
+
 	.tile {
 		width: 53px;
 		height: 53px;
 		line-height: 53px;
 		font-size: 20pt;
 	}
-	#overlay,#overlay-layer {
+
+	#overlay,
+	#overlay-layer {
 		width: 240px;
 		height: 240px;
 	}
-	#overlay-play,#overlay-paused,#overlay-message {
+
+	#overlay-play,
+	#overlay-paused,
+	#overlay-message {
 		font-size: 60pt;
 		margin: 75px auto;
 		width: 145px;
 	}
+
 	#overlay-paused {
 		width: 210px;
 	}
-	#best-scores-box,#instructions,footer,#last-challenges-box {
+
+	#best-scores-box,
+	#instructions,
+	footer,
+	#last-challenges-box {
 		width: 280px;
 		clear: both;
 	}
+
 	#view-all-scores {
 		top: 104px;
 		left: initial;
 		right: 20px;
 	}
+
 	#best-scores .name {
 		width: 54px;
 	}
+
 	#best-scores .time {
 		width: 55px;
 	}
+
 	#best-scores .score {
 		width: 42px;
 	}
+
 	#best-scores .moves {
 		width: 42px;
 	}
+
 	#time-label {
 		left: 130px;
 		top: -25px;
 	}
+
 	#moves-label {
 		left: 180px;
 		top: -25px;
 	}
+
 	#score-label {
 		left: 227px;
 		top: -25px;
 	}
-	#score-label,#moves-label,#time-label {
+
+	#score-label,
+	#moves-label,
+	#time-label {
 		font-size: 10pt;
 	}
+
 	#best-scores li img {
 		width: 15px;
 		top: 5px;
 		left: -15px;
 	}
-	#best-scores li,#best-challenges li {
+
+	#best-scores li,
+	#best-challenges li {
 		margin-left: 20px;
 	}
+
 	h3 {
 		font-size: 22pt;
 	}
+
 	#instructions {
 		text-align: justify;
 		margin-top: 20px;
 	}
+
 	#overlay-message {
 		width: 238px;
 		font-size: 50pt;
 		margin: 20px auto;
 	}
+
 	#overlay-submessage {
 		font-size: 18pt;
 	}
+
 	#overlay-buttons .input-button {
 		margin: 30px 20px 0px 23px;
 	}
+
 	#name-input-box {
 		top: 70px;
 		left: 16px;
 	}
-	#options,#last-challenges-box {
+
+	#options,
+	#last-challenges-box {
 		display: none;
 	}
 }
