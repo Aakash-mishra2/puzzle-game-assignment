@@ -164,17 +164,35 @@ function resetGame() {
 }
 
 function shuffleGame() {
-	//pauseGame();
-
-	console.log('tiles array is: ', tiles);
-	// Shuffle the array of tiles
 	for (let i = tiles.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		console.log(' i and tiles[i]', i, tiles[i]);
-		// [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+		//console.log(i, j);
+		// console.log('tiles (i)', tiles[i]);
+		// console.log('tiles (j)', tiles[j]);
+		[tiles[i].x, tiles[j].x] = [tiles[j].x, tiles[i].x];
+		[tiles[i].y, tiles[j].y] = [tiles[j].y, tiles[i].y];
+		// console.log('tiles (i)', tiles[i]);
+		// console.log('tiles (j)', tiles[j]);
+		tiles[i].insertTile();
+		tiles[j].insertTile();
+
+	}
+	//checkSolvable or not
+	const tilesSeqn = tiles
+		.sort((a, b) => a.current - b.current)
+		.map(x => x.num);
+	console.log(' final series ', tilesSeqn);
+	// shuffleTiles(positions);
+	//find row no. of blank space.
+
+}
+function shuffleTiles(positions) {
+	var pos = null;
+	var tile = null;
+	for (var i = 1; i < 16; i++) {
+
 	}
 }
-
 function resetContents() {
 	tiles = [];
 	positions = loadPositions();
