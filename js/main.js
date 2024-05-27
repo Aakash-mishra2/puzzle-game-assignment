@@ -68,7 +68,7 @@ $(document).on('click', '#reset-button', function () {
 
 $(document).on('click', '#shuffle-button', function () {
 	if (!$(this).hasClass('disabled')) {
-		shuffleGame();
+		shuffleContents();
 	} else {
 		showBtnErrorMessage();
 	}
@@ -175,23 +175,44 @@ function shuffleGame() {
 		// console.log('tiles (j)', tiles[j]);
 		tiles[i].insertTile();
 		tiles[j].insertTile();
-
 	}
 	//checkSolvable or not
+	//const blankTile = { x: 0, y: 0 };
 	const tilesSeqn = tiles
 		.sort((a, b) => a.current - b.current)
 		.map(x => x.num);
-	console.log(' final series ', tilesSeqn);
 	// shuffleTiles(positions);
 	//find row no. of blank space.
-
 }
-function shuffleTiles(positions) {
-	var pos = null;
-	var tile = null;
-	for (var i = 1; i < 16; i++) {
 
+function findBlankTile(blankTile) {
+	console.log('all tiles', tiles);
+	const map1 = new Map();
+	map1.set(1, 8);
+	map1.set(2, 8);
+	map1.set(3, 8);
+	map1.set(4, 8);
+
+	tiles.forEach((tile) => {
+		map1.set(tile.x, map1.get(tile.x) - 1);
+		map1.set(tile.y, map1.get(tile.y) - 1);
+		if (map1.get(tile.x) == 0) { map1.delete(tile.x); }
+		if (map1.get(tile.y) == 0) { map1.delete(tile.y); }
+	});
+
+	const keysArr = [...map1.keys()];
+	blankTile = {
+		x: keysArr[0],
+		y: keysArr[1]
 	}
+}
+
+function shuffleContents() {
+	shuffleGame();
+	let blankTile = { x: 0, y: 0 };
+	findBlankTile(blankTile);
+
+
 }
 function resetContents() {
 	tiles = [];
@@ -203,7 +224,6 @@ function resetContents() {
 	$('#timepoint .num').html('00:00');
 	won = false;
 }
-
 function generateTiles(positions) {
 	//console.log('positions passed are :', positions);
 	//console.log('Generating tiles');
@@ -221,23 +241,19 @@ function generateTiles(positions) {
 	}
 	//console.log('generated tiles are : ', tiles);
 }
-
 function addMove() {
 	moves++;
 	$('#score-point .num').html(moves);
 }
-
 function displayCurrentTime() {
 	var minutes = Math.floor(time / 60);
 	var seconds = time - minutes * 60;
 
 	$('#timepoint .num').html(convert(minutes) + ':' + convert(seconds));
 }
-
 function convert(n) {
 	return n > 9 ? "" + n : "0" + n;
 }
-
 function win() {
 	pauseGame();
 	$('#overlay-paused').hide();
@@ -258,7 +274,6 @@ function win() {
 		$('#submit-button').click();
 	}
 }
-
 $(document).keydown(function (e) {
 	var tile = null;
 	var position = getFreePosition();
@@ -331,7 +346,6 @@ $(document).keydown(function (e) {
 		}
 	}
 });
-
 function loadScores() {
 	$('#loader').show();
 	$('#best-scores-box .scrollable').html('');
@@ -348,7 +362,6 @@ function loadScores() {
 		}
 	});
 }
-
 function loadAllScores() {
 	$('#loader').show();
 	$('#best-scores-box .scrollable').html('');
@@ -365,7 +378,6 @@ function loadAllScores() {
 		}
 	});
 }
-
 function insertScore(name) {
 	name = mysql_real_escape_string(name);
 	$.ajax({
@@ -402,8 +414,6 @@ function insertScore(name) {
 		});
 	}
 }
-
-
 function mysql_real_escape_string(str) {
 	return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
 		switch (char) {

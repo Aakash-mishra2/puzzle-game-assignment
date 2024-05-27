@@ -12,9 +12,9 @@ function Tile(x, y, num) {
 	this.offset = null;
 	this.current = null;
 
-	this.insertTile = function() {
+	this.insertTile = function () {
 		var box = '<div class="tile position-' + this.x + '-' + this.y
-				+ '" num="' + this.num + '"id="tile-' + this.num + '" >';
+			+ '" num="' + this.num + '"id="tile-' + this.num + '" >';
 		box += num + '</div>';
 		$('#tiles-container').append(box);
 		var position = getGridOffset(this.x, this.y);
@@ -22,45 +22,45 @@ function Tile(x, y, num) {
 		position.top += 6;
 		this.offset = position;
 		$('#tile-' + this.num).css({
-			'left' : position.left,
-			'top' : position.top
+			'left': position.left,
+			'top': position.top
 		});
 		$('#tile-' + this.num).fadeIn('slow');
 		this.current = getPositionInNumber(this.x, this.y);
 	};
 
-	this.move = function() {
+	this.move = function () {
 		var position = getFreePositionNearTile(this);
 		if (position != null) {
 			var offsetEnd = getGridOffset(position.x, position.y);
 			offsetEnd.left += 6;
 			offsetEnd.top += 6;
-			
+
 			var direction = 'none';
-			
-			if(position.x == this.x){
-				if(position.y > this.y){
+
+			if (position.x == this.x) {
+				if (position.y > this.y) {
 					direction = 'right';
 				} else {
 					direction = 'left';
 				}
 			} else {
-				if(position.x > this.x){
+				if (position.x > this.x) {
 					direction = 'down';
 				} else {
 					direction = 'up';
 				}
 			}
-			
+
 			console.log(direction);
-			
-			
-			$('#tile-' + this.num).addClass('move-' +  direction);
+
+
+			$('#tile-' + this.num).addClass('move-' + direction);
 			$('#tile-' + this.num).css({
-				'top' : offsetEnd.top,
-				'left' : offsetEnd.left,
+				'top': offsetEnd.top,
+				'left': offsetEnd.left,
 			});
-			$('#tile-' + this.num).removeClass('move-' +  direction);
+			$('#tile-' + this.num).removeClass('move-' + direction);
 
 			position.free = false;
 			var oldPosition = getPosition(this.x, this.y);
@@ -71,14 +71,14 @@ function Tile(x, y, num) {
 			this.current = getPositionInNumber(this.x, this.y);
 			addMove();
 			checkGoal();
-//			$('#tile-' + this.num).removeClass('move' +  direction);
+			//			$('#tile-' + this.num).removeClass('move' +  direction);
 		}
 
 	};
 };
 
 function getTile(num) {
-	for ( var i = 0; i < tiles.length; i++) {
+	for (var i = 0; i < tiles.length; i++) {
 		if (tiles[i].num == num) {
 			return tiles[i];
 		}
@@ -132,8 +132,8 @@ function Position(x, y, free) {
 
 function loadPositions() {
 	var positions = [];
-	for ( var i = 1; i < 5; i++) {
-		for ( var j = 1; j < 5; j++) {
+	for (var i = 1; i < 5; i++) {
+		for (var j = 1; j < 5; j++) {
 			positions.push(new Position(i, j, true));
 		}
 	}
@@ -153,39 +153,39 @@ function getRandomFreePosition(positions) {
 }
 
 function getPosition(x, y) {
-	for ( var i = 0; i < positions.length; i++) {
+	for (var i = 0; i < positions.length; i++) {
 		if (positions[i].x == x && positions[i].y == y) {
 			return positions[i];
 		}
 	}
 }
 
-function getPositionInNumber(x, y){
+function getPositionInNumber(x, y) {
 	return 4 * (x - 1) + y;
 }
 
-function getTileInPosition(x, y){
-	for(var i = 0; i < tiles.length; i++){
-		if(tiles[i].x == x && tiles[i].y == y){
+function getTileInPosition(x, y) {
+	for (var i = 0; i < tiles.length; i++) {
+		if (tiles[i].x == x && tiles[i].y == y) {
 			return tiles[i];
 		}
 	}
 	return null;
 }
 
-function getFreePosition(){
-	for ( var i = 0; i < positions.length; i++) {
+function getFreePosition() {
+	for (var i = 0; i < positions.length; i++) {
 		if (positions[i].free == true) {
 			return positions[i];
 		}
 	}
 }
 
-function checkGoal(){
-	for(var i = 0; i < tiles.length; i++){
-		if(tiles[i].current != tiles[i].num){
+function checkGoal() {
+	for (var i = 0; i < tiles.length; i++) {
+		if (tiles[i].current != tiles[i].num) {
 			return;
 		}
-	}	
+	}
 	win();
 }
