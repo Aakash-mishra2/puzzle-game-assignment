@@ -11,6 +11,7 @@ var paused = true;
 var optionsOpened = false;
 var won = false;
 var challenge = false;
+var blankTile = {}
 
 $(document).ready(function () {
 	loadScores();
@@ -178,15 +179,12 @@ function shuffleGame() {
 	}
 	//checkSolvable or not
 	//const blankTile = { x: 0, y: 0 };
-	const tilesSeqn = tiles
-		.sort((a, b) => a.current - b.current)
-		.map(x => x.num);
+
 	// shuffleTiles(positions);
 	//find row no. of blank space.
 }
 
-function findBlankTile(blankTile) {
-	console.log('all tiles', tiles);
+function findBlankTile() {
 	const map1 = new Map();
 	map1.set(1, 8);
 	map1.set(2, 8);
@@ -201,17 +199,60 @@ function findBlankTile(blankTile) {
 	});
 
 	const keysArr = [...map1.keys()];
+	console.log(' all tiles, keys', tiles, keysArr);
 	blankTile = {
 		x: keysArr[0],
 		y: keysArr[1]
 	}
 }
+function countInversions(arr) {
+	let inversions = 0;
+	const n = arr.length;
+	for (let i = 0; i < n - 1; i++) {
+		for (let j = i + 1; j < n; j++) {
+			if (arr[i] && arr[j] && arr[i] > arr[j]) {
+				inversions++;
+			}
+		}
+	}
+	return inversions;
+}
+
+function isSolvable() {
+	const tilesSequence = tiles
+		.sort((a, b) => a.current - b.current)
+		.map(x => x.num);
+	const inversions = countInversions(tilesSequence);
+
+	console.log('inversions', inversions);
+	const blankRowFromBottom = 4 - blankTile.y + 1;
+	console.log(blankRowFromBottom);
+	return ((inversions + blankRowFromBottom) % 2 === 1);
+}
+
+function showSolvable() {
+	console.log('show solvable invoked');
+	$('#overlay-inner').show();
+	$('#overlay-inner #overlay-message').html('YOU WIN!').show();
+}
 
 function shuffleContents() {
 	shuffleGame();
-	let blankTile = { x: 0, y: 0 };
-	findBlankTile(blankTile);
 
+	findBlankTile();
+	console.log('blank tile at', blankTile);
+	let flag = isSolvable();
+	console.log(' flag is ', flag);
+	if (flag == true) {
+		//console.log($('#overlay-inner #overlay-message'));
+		//$('#overlay-inner').show();
+		//$('#overlay-inner #overlay-message').html('Not Solvable!').show();
+		//pauseGame();
+		//$('overlay-paused').hide();
+		showSolvable();
+
+	}
+	//$('#overlay-inner #overlay-message').html('YOU WIN!').show();
 
 }
 function resetContents() {
