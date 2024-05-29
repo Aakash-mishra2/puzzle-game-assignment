@@ -135,6 +135,7 @@ function startGame() {
 	$('#overlay-play').hide();
 	$('#overlay-message').hide();
 	$('#overlay-submessage').hide();
+	//$('#solvable-message').hide();
 	$(this).css('opacity', '1');
 	if (tiles.length == 0) {
 		resetContents();
@@ -230,11 +231,6 @@ function isSolvable() {
 	return ((inversions + blankRowFromBottom) % 2 === 1);
 }
 
-function showSolvable() {
-	console.log('show solvable invoked');
-	$('#overlay-inner').show();
-	$('#overlay-inner #overlay-message').html('YOU WIN!').show();
-}
 
 function shuffleContents() {
 	shuffleGame();
@@ -249,8 +245,11 @@ function shuffleContents() {
 		//$('#overlay-inner #overlay-message').html('Not Solvable!').show();
 		//pauseGame();
 		//$('overlay-paused').hide();
-		showSolvable();
-
+		//$('solvable-label').show();
+		$('#label-text').html('This arrangement is not Sovable! Shuffle again !!');
+	}
+	else {
+		$('#label-text').html('');
 	}
 	//$('#overlay-inner #overlay-message').html('YOU WIN!').show();
 
