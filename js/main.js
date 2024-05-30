@@ -12,7 +12,7 @@ var optionsOpened = false;
 var won = false;
 var challenge = false;
 var blankTile = {}
-
+var blankTileIndex = -1;
 $(document).ready(function () {
 	loadScores();
 	loadChallenges();
@@ -73,7 +73,7 @@ $(document).on('click', '#shuffle-button', function () {
 	} else {
 		showBtnErrorMessage();
 	}
-})
+});
 
 $(document).on('click', '#overlay-play', function () {
 	if (!$('#start-button').hasClass('disabled')) {
@@ -145,8 +145,6 @@ function startGame() {
 		displayCurrentTime();
 	}, 1000);
 }
-
-
 function pauseGame() {
 	paused = true;
 	$('#start-button').html('START');
@@ -154,7 +152,6 @@ function pauseGame() {
 	$('#overlay').fadeIn('fast');
 	clearInterval(counter);
 }
-
 function resetGame() {
 	pauseGame();
 	resetContents();
@@ -164,27 +161,15 @@ function resetGame() {
 	$('#overlay-submessage').hide();
 	$('#overlay-buttons').hide();
 }
-
 function shuffleGame() {
 	for (let i = tiles.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		//console.log(i, j);
-		// console.log('tiles (i)', tiles[i]);
-		// console.log('tiles (j)', tiles[j]);
 		[tiles[i].x, tiles[j].x] = [tiles[j].x, tiles[i].x];
 		[tiles[i].y, tiles[j].y] = [tiles[j].y, tiles[i].y];
-		// console.log('tiles (i)', tiles[i]);
-		// console.log('tiles (j)', tiles[j]);
 		tiles[i].insertTile();
 		tiles[j].insertTile();
 	}
-	//checkSolvable or not
-	//const blankTile = { x: 0, y: 0 };
-
-	// shuffleTiles(positions);
-	//find row no. of blank space.
 }
-
 function findBlankTile() {
 	const map1 = new Map();
 	map1.set(1, 8);
@@ -200,7 +185,7 @@ function findBlankTile() {
 	});
 
 	const keysArr = [...map1.keys()];
-	console.log(' all tiles, keys', tiles, keysArr);
+	//console.log(' all tiles, keys', tiles, keysArr);
 	blankTile = {
 		x: keysArr[0],
 		y: keysArr[1]
@@ -218,41 +203,26 @@ function countInversions(arr) {
 	}
 	return inversions;
 }
-
 function isSolvable() {
 	const tilesSequence = tiles
 		.sort((a, b) => a.current - b.current)
 		.map(x => x.num);
 	const inversions = countInversions(tilesSequence);
-
-	console.log('inversions', inversions);
 	const blankRowFromBottom = 4 - blankTile.y + 1;
-	console.log(blankRowFromBottom);
 	return ((inversions + blankRowFromBottom) % 2 === 1);
 }
-
-
 function shuffleContents() {
 	shuffleGame();
-
+	$('#label-text').html('');
 	findBlankTile();
-	console.log('blank tile at', blankTile);
 	let flag = isSolvable();
-	console.log(' flag is ', flag);
 	if (flag == true) {
-		//console.log($('#overlay-inner #overlay-message'));
-		//$('#overlay-inner').show();
-		//$('#overlay-inner #overlay-message').html('Not Solvable!').show();
-		//pauseGame();
-		//$('overlay-paused').hide();
-		//$('solvable-label').show();
-		$('#label-text').html('This arrangement is not Sovable! Shuffle again !!');
+		$('#label-text').html('This arrangement is not Solvable, Shuffle again !!');
+		pauseGame();
 	}
 	else {
 		$('#label-text').html('');
 	}
-	//$('#overlay-inner #overlay-message').html('YOU WIN!').show();
-
 }
 function resetContents() {
 	tiles = [];
@@ -263,6 +233,24 @@ function resetContents() {
 	$('#score-point .num').html('0');
 	$('#timepoint .num').html('00:00');
 	won = false;
+}
+var solveTile = 1;
+function solveStep() {
+	let set1 = new Set([...Array(16).keys()].map(x => x + 1));
+	let temp = tiles.map((tile) => {
+		set1.delete(tile.current);
+		return tile.current;
+	});
+	blankTileIndex = set1.values().next().value;
+	console.log('all tiles', tiles);
+	//console.log('current postns', temp);
+	//console.log('blankTile at', blankTileIndex);
+	for (i = solveTile - 1; i < tiles.length; i++) {
+		if (tiles[i].num != tiles[i].current) {
+			solveTile = i + 1;
+			break;
+		}
+	}
 }
 function generateTiles(positions) {
 	//console.log('positions passed are :', positions);
@@ -278,8 +266,8 @@ function generateTiles(positions) {
 		position.free = false;
 		position = null;
 		tile = null;
+		//console.log('generated tiles are : ', tiles);
 	}
-	//console.log('generated tiles are : ', tiles);
 }
 function addMove() {
 	moves++;
@@ -477,7 +465,6 @@ function mysql_real_escape_string(str) {
 		}
 	});
 }
-
 $(document).on('keypress', '#name-input-field', function (e) {
 	if (e.keyCode == 13) {
 		e.preventDefault();
@@ -490,7 +477,6 @@ $(document).on('keypress', '#name-input-field', function (e) {
 		}
 	}
 });
-
 $(document).on('click', '#view-all-scores', function () {
 	if ($(this).html() == 'View all') {
 		loadAllScores();
@@ -500,7 +486,6 @@ $(document).on('click', '#view-all-scores', function () {
 		$(this).html('View all');
 	}
 });
-
 $(document).on('click', '#view-all-challenges', function () {
 	if ($(this).html() == 'View all') {
 		loadAllChallenges();
@@ -510,7 +495,6 @@ $(document).on('click', '#view-all-challenges', function () {
 		$(this).html('View all');
 	}
 });
-
 $(document).on('click', '#options-img', function () {
 	if (!$('#challenge-button').css('opacity') == '1') {
 		$("#new-challenge-box").slideUp('slow');
@@ -523,7 +507,6 @@ $(document).on('click', '#options-img', function () {
 	}
 	$("#options-inner").slideToggle("slow");
 });
-
 $(document).on('click', '#challenge-button', function () {
 
 	if ($("#options-inner").is(":visible")) {
@@ -543,8 +526,10 @@ $(document).on('click', '#challenge-button', function () {
 	}
 
 });
-
-
+$(document).on('click', '#help-button', function () {
+	solveStep();
+	console.log('help clicked');
+})
 function moveSwipedTile(direction) {
 	var pos = getFreePosition();
 	var tile = null;
@@ -578,17 +563,14 @@ function moveSwipedTile(direction) {
 	}
 
 }
-
 function resizeWindowMobile() {
 	$('#timepoint').insertAfter('#play-box');
 	$('#score-point').insertAfter('#play-box');
 }
-
 function resizeWindowDesktop() {
 	$('#info-box').prepend($('#timepoint'));
 	$('#info-box').prepend($('#score-point'));
 }
-
 $(window).resize(function () {
 	setTimeout(function () {
 		if ($(window).width() < 630) {
@@ -598,7 +580,6 @@ $(window).resize(function () {
 		}
 	}, 500);
 });
-
 //Challenges
 $(document).on('click', '#new-challenge', function () {
 	var on_challenge = localStorage.getItem("challenge_code");
@@ -623,11 +604,9 @@ $(document).on('click', '#new-challenge', function () {
 		alert('another challenge!');
 	}
 });
-
 function showBtnErrorMessage() {
 	$('#buttons-error-message').fadeIn('slow').delay(500).fadeOut('slow');
 }
-
 $(document).on('click', '#cancel-challenge', function () {
 	localStorage.clear();
 	$('#challenge-details').slideUp("slow");
@@ -635,11 +614,9 @@ $(document).on('click', '#cancel-challenge', function () {
 	$('#reset-button').removeClass('disabled');
 	$('#start-button').removeClass('disabled');
 });
-
 $(document).on('click', '#refresh-icon', function () {
 	loadChallengeInfo(localStorage.getItem('challenge_code'));
 });
-
 $(document).on('click', '#resume-challenge-button', function () {
 	if ($('#challenge-code-input').val() != '') {
 		console.log($('#challenge-code-input').val().length);
@@ -669,7 +646,6 @@ $(document).on('click', '#resume-challenge-button', function () {
 		}
 	}
 });
-
 function loadChallengeInfo(code) {
 	$('#challenge-loader').show();
 	$('#match-row').html('');
@@ -697,7 +673,6 @@ function loadChallengeInfo(code) {
 		}
 	});
 }
-
 function loadChallenges() {
 	$('#clg-loader').show();
 	$('#last-challenges-box .scrollable').html('');
@@ -714,7 +689,6 @@ function loadChallenges() {
 		}
 	});
 }
-
 function loadAllChallenges() {
 	$('#clg-loader').show();
 	$('#last-challenges-box .scrollable').html('');

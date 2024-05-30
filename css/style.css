@@ -356,9 +356,25 @@ span.clear-text {
 	font-size: 15pt;
 }
 
+#help-button {
+	position: absolute;
+	top: 71px;
+	left: -100px;
+	width: 100px;
+	height: 40px;
+	background-color: rgba(18, 73, 7, 0.17);
+	border-radius: 5px;
+	font-weight: bold;
+	line-height: 40px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 15pt;
+}
+
 #start-button:HOVER,
 #reset-button:HOVER,
-#shuffle-button:HOVER {
+#shuffle-button:HOVER,
+#help-button:HOVER {
 	opacity: 0.8;
 }
 
