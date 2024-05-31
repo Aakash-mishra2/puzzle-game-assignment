@@ -11,7 +11,6 @@ function Tile(x, y, num) {
 	this.num = num;
 	this.offset = null;
 	this.current = null;
-
 	this.insertTile = function () {
 		var box = '<div class="tile position-' + this.x + '-' + this.y
 			+ '" num="' + this.num + '"id="tile-' + this.num + '" >';
@@ -28,7 +27,6 @@ function Tile(x, y, num) {
 		$('#tile-' + this.num).fadeIn('slow');
 		this.current = getPositionInNumber(this.x, this.y);
 	};
-
 	this.move = function () {
 		var position = getFreePositionNearTile(this);
 		if (position != null) {

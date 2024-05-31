@@ -13,6 +13,7 @@ var won = false;
 var challenge = false;
 var blankTile = {}
 var blankTileIndex = -1;
+let tileMap = new Map();
 $(document).ready(function () {
 	loadScores();
 	loadChallenges();
@@ -144,6 +145,12 @@ function startGame() {
 		time++;
 		displayCurrentTime();
 	}, 1000);
+
+	console.log('all tiles are at start game', tiles);
+	tiles.forEach((tile) => {
+		tileMap.set(tile.current, tile.num);
+	})
+	console.log('tiles map is', tileMap)
 }
 function pauseGame() {
 	paused = true;
@@ -172,6 +179,7 @@ function shuffleGame() {
 }
 function findBlankTile() {
 	const map1 = new Map();
+	let set1 = new Set([...Array(16).keys()].map(x => x + 1));
 	map1.set(1, 8);
 	map1.set(2, 8);
 	map1.set(3, 8);
@@ -180,6 +188,7 @@ function findBlankTile() {
 	tiles.forEach((tile) => {
 		map1.set(tile.x, map1.get(tile.x) - 1);
 		map1.set(tile.y, map1.get(tile.y) - 1);
+		set1.delete(tile.current);
 		if (map1.get(tile.x) == 0) { map1.delete(tile.x); }
 		if (map1.get(tile.y) == 0) { map1.delete(tile.y); }
 	});
@@ -188,8 +197,10 @@ function findBlankTile() {
 	//console.log(' all tiles, keys', tiles, keysArr);
 	blankTile = {
 		x: keysArr[0],
-		y: keysArr[1]
+		y: keysArr[1],
+		index: set1.values().next().value
 	}
+	console.log('blanktile is ', blankTile);
 }
 function countInversions(arr) {
 	let inversions = 0;
@@ -234,30 +245,67 @@ function resetContents() {
 	$('#timepoint .num').html('00:00');
 	won = false;
 }
-var solveTile = 1;
+let solveTile = 0;
 function solveStep() {
-	let set1 = new Set([...Array(16).keys()].map(x => x + 1));
-	let temp = tiles.map((tile) => {
-		set1.delete(tile.current);
-		return tile.current;
-	});
-	blankTileIndex = set1.values().next().value;
-	console.log('all tiles', tiles);
+
+	// let temp = tiles.map((tile) => {
+	// 	set1.delete(tile.current);
+	// 	return tile.current;
+	// });
+	// blankTileIndex = set1.values().next().value;
+
+	// console.log('all tiles', tiles);
 	//console.log('current postns', temp);
 	//console.log('blankTile at', blankTileIndex);
-	for (i = solveTile - 1; i < tiles.length; i++) {
-		if (tiles[i].num != tiles[i].current) {
-			solveTile = i + 1;
-			break;
+	if (solveTile == 0) {
+		findBlankTile();
+		// swap blank tile
+		let lastTile = tiles[tileMap.get(16) - 1];
+
+		console.log('lastTile before', lastTile);
+		lastTile.x = blankTile.x;
+		lastTile.y = blankTile.y;
+		lastTile.current = blankTile.index;
+		console.log('lasttile after', lastTile)
+		lastTile.insertTile();
+
+		solveTile++;
+
+	}
+	else {
+
+		for (i = solveTile - 1; i < tiles.length; i++) {
+			if (tiles[i].num != tiles[i].current) {
+				solveTile = i + 1;
+				break;
+			}
 		}
+		//	console.log('solve tile num', solveTile);
+		//	console.log('tile map', tileMap);
+		let tile1 = tiles[solveTile - 1];
+		let t2Index = tileMap.get(tile1.num);
+		//	console.log('t2 curr', t2Index);
+		let tile2 = tiles[t2Index - 1];
+		//	console.log('tile 1 before', tile1);
+		//	console.log(' tile2 before', tile2);
+		[tile1.x, tile2.x] = [tile2.x, tile1.x];
+		[tile1.y, tile2.y] = [tile2.y, tile1.y];
+		[tile1.current, tile2.current] = [tile2.current, tile1.current];
+
+		tileMap.set(tile1.current, tile1.num);
+		tileMap.set(tile2.current, tile2.num);
+		//	console.log(' tile 1 is: ', tile1);
+		//	console.log('tile 2 is: ', tile2);
+		tile1.insertTile();
+		tile2.insertTile();
 	}
 }
 function generateTiles(positions) {
 	//console.log('positions passed are :', positions);
 	//console.log('Generating tiles');
-	var position = null;
-	var tile = null;
-	for (var i = 1; i < 16; i++) {
+	let position = null;
+	let tile = null;
+	for (let i = 1; i < 16; i++) {
 		position = getRandomFreePosition(positions);
 		//console.log('position for ' + i + ' is : ', position);
 		tile = new Tile(position.x, position.y, i);
@@ -274,9 +322,8 @@ function addMove() {
 	$('#score-point .num').html(moves);
 }
 function displayCurrentTime() {
-	var minutes = Math.floor(time / 60);
-	var seconds = time - minutes * 60;
-
+	let minutes = Math.floor(time / 60);
+	let seconds = time - minutes * 60;
 	$('#timepoint .num').html(convert(minutes) + ':' + convert(seconds));
 }
 function convert(n) {
