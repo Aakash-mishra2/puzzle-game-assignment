@@ -131,6 +131,7 @@ $(document).on('click', '#overlay-buttons #share-button', function () {
 
 function startGame() {
 	paused = false;
+	solveTile = 0;
 	$('#start-button').html('PAUSE');
 	$('#overlay').fadeOut('fast');
 	$('#overlay-play').hide();
@@ -184,6 +185,7 @@ function findBlankTile() {
 	map1.set(2, 8);
 	map1.set(3, 8);
 	map1.set(4, 8);
+	console.log('map is ', map1);
 
 	tiles.forEach((tile) => {
 		map1.set(tile.x, map1.get(tile.x) - 1);
@@ -192,15 +194,14 @@ function findBlankTile() {
 		if (map1.get(tile.x) == 0) { map1.delete(tile.x); }
 		if (map1.get(tile.y) == 0) { map1.delete(tile.y); }
 	});
-
+	console.log('map final is', map1);
 	const keysArr = [...map1.keys()];
-	//console.log(' all tiles, keys', tiles, keysArr);
+	console.log(' keys', keysArr);
 	blankTile = {
 		x: keysArr[0],
-		y: keysArr[1],
+		y: keysArr.length > 1 ? keysArr[1] : keysArr[0],
 		index: set1.values().next().value
 	}
-	console.log('blanktile is ', blankTile);
 }
 function countInversions(arr) {
 	let inversions = 0;
@@ -261,33 +262,35 @@ function solveStep() {
 		findBlankTile();
 		// swap blank tile
 		let lastTile = tiles[tileMap.get(16) - 1];
-
-		console.log('lastTile before', lastTile);
+		//console.log('tiles are ', tiles);
+		//console.log('blank tile is', blankTile);
+		//console.log('lastTile before', lastTile);
 		lastTile.x = blankTile.x;
 		lastTile.y = blankTile.y;
 		lastTile.current = blankTile.index;
-		console.log('lasttile after', lastTile)
+		tiles[lastTile.num - 1] = lastTile;
+		//console.log('last tile after', lastTile)
+		//console.log('all tiles after', tiles)
 		lastTile.insertTile();
 
 		solveTile++;
-
 	}
 	else {
-
 		for (i = solveTile - 1; i < tiles.length; i++) {
 			if (tiles[i].num != tiles[i].current) {
 				solveTile = i + 1;
 				break;
 			}
 		}
+		//console.log('solveTile is ', solveTile);
 		//	console.log('solve tile num', solveTile);
 		//	console.log('tile map', tileMap);
 		let tile1 = tiles[solveTile - 1];
 		let t2Index = tileMap.get(tile1.num);
 		//	console.log('t2 curr', t2Index);
 		let tile2 = tiles[t2Index - 1];
-		//	console.log('tile 1 before', tile1);
-		//	console.log(' tile2 before', tile2);
+		//console.log('tile 1 before', tile1);
+		//console.log(' tile2 before', tile2);
 		[tile1.x, tile2.x] = [tile2.x, tile1.x];
 		[tile1.y, tile2.y] = [tile2.y, tile1.y];
 		[tile1.current, tile2.current] = [tile2.current, tile1.current];
