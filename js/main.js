@@ -149,7 +149,7 @@ function startGame() {
 	if (tiles.length == 0) {
 		resetContents();
 	}
-	if( timerStarted === false){
+	if ( timerStarted === false) {
 		timerStarted = true;
 		counter = setInterval(function () {
 			time++;
