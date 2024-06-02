@@ -30,8 +30,8 @@ dir {
 h1 {
 	font-size: 40pt;
 	display: block;
-	float: right;
-	padding-right: 15px;
+	/* float: right; */
+	/* padding-right: 15px; */
 	text-align: center;
 	text-transform: uppercase;
 	margin-bottom: 0px;
@@ -68,9 +68,12 @@ a {
 
 #info-box {
 	float: left;
-	margin-top: 45px;
-	position: relative;
-	margin-left: 25px;
+	margin-top: 12px;
+	position: relative;	
+	margin-left: 60px;
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
 }
 
 #options {
@@ -81,18 +84,17 @@ a {
 }
 
 #solvable-label {
-	min-height: 190px;
-	width: 100%;
+	min-height: 140px;
+	width: 100%;	
 	text-align: center;
 }
 
 #solvable-label p {
 	margin: 0px auto;
-	margin-left: 10%;
+	/* margin-left: 10%; */
 	font-size: 18pt;
 	font-weight: 580;
-	position: absolute;
-	top: 165px;
+	/* position: absolute; */
 }
 
 #challenge-button {
@@ -113,15 +115,12 @@ a {
 
 #cancel-challenge {
 	background-color: rgba(255, 16, 16, 0.69);
-	/* position: absolute; */
 	width: 85px;
 	color: white;
 	font-size: 18pt;
 	padding: 8px;
 	border-radius: 6px;
 	font-weight: bold;
-	/* top: 10px; */
-	/* left: 91px; */
 	float: left;
 	cursor: pointer;
 	margin-top: 30px;
@@ -137,9 +136,6 @@ a {
 }
 
 #challenge-code-input {
-	/* position: absolute; */
-	/* top: 125px; */
-	/* left: 20px; */
 	padding: 4px;
 	width: 110px;
 	border: 0px;
@@ -152,8 +148,6 @@ a {
 }
 
 #resume-challenge-button {
-	/* position: absolute; */
-	/* color: white; */
 	background-color: rgba(111, 165, 104, 0.61);
 	width: 37px;
 	font-size: 17pt;
@@ -162,8 +156,6 @@ a {
 	font-weight: bold;
 	margin: 0px 0px 10px 10px;
 	cursor: pointer;
-	/* top: 120px; */
-	/* left: 0px; */
 	width: 25px;
 	float: left;
 }
@@ -177,7 +169,7 @@ a {
 	font-size: 14pt;
 }
 
-img#beta {
+img #beta {
 	position: absolute;
 	top: -10px;
 	left: 130px;
@@ -186,7 +178,6 @@ img#beta {
 
 img#challenge-arrow {
 	width: 26px;
-	/* display: block; */
 	float: right;
 	opacity: 1;
 }
@@ -282,13 +273,22 @@ span.clear-text {
 	margin-left: 23px;
 }
 
+.scoreboard {
+	display: flex;
+}
+.actions {
+	width: max-content;
+	height: 100px;
+	display: grid;
+	grid-template-columns: 120px 120px;
+}
+
 #score-point,
 #timepoint {
-	width: 110px;
+	width: 100px;
 	height: 60px;
 	border-radius: 5px;
 	background-color: rgba(158, 170, 255, 0.37);
-	float: left;
 	margin-right: 20px;
 }
 
@@ -310,11 +310,7 @@ span.clear-text {
 	float: left;
 	display: none;
 }
-
-#start-button {
-	position: absolute;
-	top: 71px;
-	left: 5px;
+.button-styles {
 	width: 100px;
 	height: 40px;
 	background-color: rgba(18, 73, 7, 0.17);
@@ -324,51 +320,26 @@ span.clear-text {
 	text-align: center;
 	cursor: pointer;
 	font-size: 15pt;
+}
+
+#start-button {
+	top: 71px;
+	left: 5px;
 }
 
 #reset-button {
-	position: absolute;
 	top: 71px;
 	left: 135px;
-	width: 100px;
-	height: 40px;
-	background-color: rgba(18, 73, 7, 0.17);
-	border-radius: 5px;
-	font-weight: bold;
-	line-height: 40px;
-	text-align: center;
-	cursor: pointer;
-	font-size: 15pt;
 }
 
 #shuffle-button {
-	position: absolute;
 	top: 71px;
 	left: 255px;
-	width: 100px;
-	height: 40px;
-	background-color: rgba(18, 73, 7, 0.17);
-	border-radius: 5px;
-	font-weight: bold;
-	line-height: 40px;
-	text-align: center;
-	cursor: pointer;
-	font-size: 15pt;
 }
 
 #help-button {
-	position: absolute;
 	top: 71px;
 	left: -100px;
-	width: 100px;
-	height: 40px;
-	background-color: rgba(18, 73, 7, 0.17);
-	border-radius: 5px;
-	font-weight: bold;
-	line-height: 40px;
-	text-align: center;
-	cursor: pointer;
-	font-size: 15pt;
 }
 
 #start-button:HOVER,
@@ -453,14 +424,17 @@ span.clear-text {
 
 #overlay-play,
 #overlay-paused,
-#overlay-message {
+#overlay-message,
+#overlay-shuffle {
 	color: white;
 	font-size: 78pt;
 	margin: 170px auto;
 	width: 186px;
 	cursor: pointer;
 }
-
+#overlay-shuffle {
+	margin-left: 20% !important;
+}
 #overlay-message {
 	width: 400px;
 	cursor: default;
@@ -474,7 +448,8 @@ span.clear-text {
 }
 
 #overlay-play:HOVER,
-#overlay-paused:HOVER {
+#overlay-paused:HOVER,
+#overlay-shuffle:HOVER {
 	opacity: 0.8;
 }
 
@@ -925,8 +900,12 @@ div#match-row {
 
 	#info-box {
 		float: left;
-		margin: 0 0 21px 0;
-		position: relative;
+	margin-top: 12px;
+	position: relative;	
+	margin-left: 60px;
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
 	}
 
 	#score-point,
@@ -1001,6 +980,11 @@ div#match-row {
 		font-size: 60pt;
 		margin: 75px auto;
 		width: 145px;
+	}
+	#overlay-shuffle {
+		font-size: 60pt;
+		margin: 75px auto;
+		margin-left: 20%;
 	}
 
 	#overlay-paused {

@@ -2,22 +2,25 @@ $(function () {
 	FastClick.attach(document.body);
 });
 
-var positions = [];
-var tiles = [];
-var time = 0;
-var moves = 0;
-var counter = null;
-var paused = true;
-var optionsOpened = false;
-var won = false;
-var challenge = false;
-var blankTile = {}
-var blankTileIndex = -1;
+let positions = [];
+let tiles = [];
+let time = 0;
+let timerStarted = false;
+let moves = 0;
+let counter = null;
+let paused = true;
+let optionsOpened = false;
+let won = false;
+let challenge = false;
+let blankTile = {}
+let blankTileIndex = -1;
 let tileMap = new Map();
 $(document).ready(function () {
 	loadScores();
 	loadChallenges();
-
+	$('#shuffle-button').addClass('disabled');
+	$('#help-button').addClass('disabled');
+	$('#overlay-shuffle').hide();
 	//Check game mode
 	if (localStorage.getItem("challenge_code") != null) {
 		$('#reset-button').addClass('disabled');
@@ -30,8 +33,8 @@ $(document).ready(function () {
 		//Generic swipe handler for all directions
 		swipe: function (event, direction, distance, duration, fingerCount) {
 			if (!paused) {
-				console.log('swipe event', distance, duration, fingerCount);
-				console.log("You swiped " + direction);
+				//console.log('swipe event', distance, duration, fingerCount);
+				//console.log("You swiped " + direction);
 				moveSwipedTile(direction);
 			}
 		},
@@ -87,6 +90,9 @@ $(document).on('click', '#overlay-play', function () {
 $(document).on('click', '#overlay-paused', function () {
 	startGame();
 });
+$(document).on('click', '#overlay-shuffle', function () {
+	shuffleContents();
+});
 
 $(document).on('click', '#overlay-buttons #submit-button', function () {
 	if ($(this).hasClass('enabled')) {
@@ -136,33 +142,49 @@ function startGame() {
 	$('#overlay').fadeOut('fast');
 	$('#overlay-play').hide();
 	$('#overlay-message').hide();
+	$('#overlay-shuffle').hide();
 	$('#overlay-submessage').hide();
 	//$('#solvable-message').hide();
 	$(this).css('opacity', '1');
 	if (tiles.length == 0) {
 		resetContents();
 	}
-	counter = setInterval(function () {
-		time++;
-		displayCurrentTime();
-	}, 1000);
+	if( timerStarted === false){
+		timerStarted = true;
+		counter = setInterval(function () {
+			time++;
+			displayCurrentTime();
+		}, 1000);
+	}
 
-	console.log('all tiles are at start game', tiles);
+
+	//console.log('all tiles are at start game', tiles);
 	tiles.forEach((tile) => {
 		tileMap.set(tile.current, tile.num);
 	})
-	console.log('tiles map is', tileMap)
+	$('#shuffle-button').removeClass('disabled');
+	$('#help-button').removeClass('disabled');
+	//console.log('tiles map is', tileMap)
 }
 function pauseGame() {
-	paused = true;
+	paused = true;	
 	$('#start-button').html('START');
 	$('#overlay-paused').show();
 	$('#overlay').fadeIn('fast');
 	clearInterval(counter);
 }
+function pause_Shuffle() {
+	paused = true;
+	$('#start-button').html('START');
+	$('#overlay-shuffle').show();
+	$('#overlay').fadeIn('fast');
+	clearInterval(counter);
+
+}
 function resetGame() {
 	pauseGame();
 	resetContents();
+	$('#overlay-shuffle').hide();
 	$('#overlay-paused').hide();
 	$('#overlay-play').show();
 	$('#overlay-message').hide();
@@ -229,11 +251,18 @@ function shuffleContents() {
 	findBlankTile();
 	let flag = isSolvable();
 	if (flag == true) {
-		$('#label-text').html('This arrangement is not Solvable, Shuffle again !!');
-		pauseGame();
+		setTimeout($('#label-text').html('This arrangement is not Solvable, Shuffle again !!'), 2000);
+		pause_Shuffle();
+		$('#help-button').addClass('disabled');
 	}
 	else {
+		startGame();
+		if( pause ){ 
+			pause = false; 
+			$('#overlay-shuffle').show();
+		}
 		$('#label-text').html('');
+		$('#help-button').removeClass('disabled');
 	}
 }
 function resetContents() {
@@ -248,7 +277,6 @@ function resetContents() {
 }
 let solveTile = 0;
 function solveStep() {
-
 	// let temp = tiles.map((tile) => {
 	// 	set1.delete(tile.current);
 	// 	return tile.current;
@@ -269,10 +297,9 @@ function solveStep() {
 		lastTile.y = blankTile.y;
 		lastTile.current = blankTile.index;
 		tiles[lastTile.num - 1] = lastTile;
-		//console.log('last tile after', lastTile)
-		//console.log('all tiles after', tiles)
+		//console.log('last tile after', lastTile);
+		//console.log('all tiles after', tiles);
 		lastTile.insertTile();
-
 		solveTile++;
 	}
 	else {
@@ -283,11 +310,11 @@ function solveStep() {
 			}
 		}
 		//console.log('solveTile is ', solveTile);
-		//	console.log('solve tile num', solveTile);
-		//	console.log('tile map', tileMap);
+		//console.log('solve tile num', solveTile);
+		//console.log('tile map', tileMap);
 		let tile1 = tiles[solveTile - 1];
 		let t2Index = tileMap.get(tile1.num);
-		//	console.log('t2 curr', t2Index);
+		//console.log('t2 curr', t2Index);
 		let tile2 = tiles[t2Index - 1];
 		//console.log('tile 1 before', tile1);
 		//console.log(' tile2 before', tile2);
