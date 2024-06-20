@@ -161,7 +161,7 @@ function startGame() {
 	//console.log('all tiles are at start game', tiles);
 	tiles.forEach((tile) => {
 		tileMap.set(tile.current, tile.num);
-	})
+	});
 	$('#shuffle-button').removeClass('disabled');
 	$('#help-button').removeClass('disabled');
 	//console.log('tiles map is', tileMap)
@@ -257,8 +257,8 @@ function shuffleContents() {
 	}
 	else {
 		startGame();
-		if( pause ){ 
-			pause = false; 
+		if( paused === true ){ 
+			paused = false; 
 			$('#overlay-shuffle').show();
 		}
 		$('#label-text').html('');
@@ -277,28 +277,14 @@ function resetContents() {
 }
 let solveTile = 0;
 function solveStep() {
-	// let temp = tiles.map((tile) => {
-	// 	set1.delete(tile.current);
-	// 	return tile.current;
-	// });
-	// blankTileIndex = set1.values().next().value;
-
-	// console.log('all tiles', tiles);
-	//console.log('current postns', temp);
-	//console.log('blankTile at', blankTileIndex);
 	if (solveTile == 0) {
 		findBlankTile();
 		// swap blank tile
 		let lastTile = tiles[tileMap.get(16) - 1];
-		//console.log('tiles are ', tiles);
-		//console.log('blank tile is', blankTile);
-		//console.log('lastTile before', lastTile);
 		lastTile.x = blankTile.x;
 		lastTile.y = blankTile.y;
 		lastTile.current = blankTile.index;
 		tiles[lastTile.num - 1] = lastTile;
-		//console.log('last tile after', lastTile);
-		//console.log('all tiles after', tiles);
 		lastTile.insertTile();
 		solveTile++;
 	}
@@ -308,24 +294,19 @@ function solveStep() {
 				solveTile = i + 1;
 				break;
 			}
+			if( i == tiles.length - 1){
+				win();
+			}
 		}
-		//console.log('solveTile is ', solveTile);
-		//console.log('solve tile num', solveTile);
-		//console.log('tile map', tileMap);
 		let tile1 = tiles[solveTile - 1];
 		let t2Index = tileMap.get(tile1.num);
-		//console.log('t2 curr', t2Index);
 		let tile2 = tiles[t2Index - 1];
-		//console.log('tile 1 before', tile1);
-		//console.log(' tile2 before', tile2);
 		[tile1.x, tile2.x] = [tile2.x, tile1.x];
 		[tile1.y, tile2.y] = [tile2.y, tile1.y];
 		[tile1.current, tile2.current] = [tile2.current, tile1.current];
 
 		tileMap.set(tile1.current, tile1.num);
 		tileMap.set(tile2.current, tile2.num);
-		//	console.log(' tile 1 is: ', tile1);
-		//	console.log('tile 2 is: ', tile2);
 		tile1.insertTile();
 		tile2.insertTile();
 	}
